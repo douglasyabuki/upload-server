@@ -3,5 +3,8 @@
   "[typescript]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "editor.codeActionsOnSave": { "source.organizeImports.biome": "explicit" }
+  "editor.codeActionsOnSave": { "source.organizeImports.biome": "explicit" },
+  "cSpell.words": [
+    "uuidv"
+  ]
 }
