@@ -1,5 +1,6 @@
 import { db } from '@/infra/db'
 import { schema } from '@/infra/db/schemas'
+import { uploadFileToStorage } from '@/infra/storage/upload-file-to-storage'
 import { type Either, makeLeft, makeRight } from '@/shared/either'
 import { Readable } from 'node:stream'
 import { z } from 'zod'
@@ -23,13 +24,19 @@ export async function uploadImage(
   if (!allowedMimeTypes.includes(contentType)) {
     return makeLeft(new InvalidFileFormat())
   }
-  // TODO: carregar a imagem p/ o Cloudfare R2
+
+  const { key, url } = await uploadFileToStorage({
+    folder: 'images',
+    fileName,
+    contentType,
+    contentStream,
+  })
 
   await db.insert(schema.uploads).values({
     name: fileName,
-    remoteKey: fileName,
-    remoteUrl: fileName,
+    remoteKey: key,
+    remoteUrl: url,
   })
 
-  return makeRight({ url: '' })
+  return makeRight({ url })
 }
